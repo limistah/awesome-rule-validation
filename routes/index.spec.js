@@ -41,11 +41,13 @@ describe("/", () => {
       expect(res.statusCode).not.toBe(404);
     });
 
+    // a/ The rule and data fields are required.
     it("should throw if rule is not set", async () => {
       const res = await server.post("/validate-rule").send({});
       expect(res.statusCode).toBe(400);
     });
 
+    // a/ The rule and data fields are required.
     it("should return a message when rule is not set", async () => {
       const res = await server.post("/validate-rule").send({});
       expect(res.body.message).toBe("rule is required.");
@@ -53,16 +55,35 @@ describe("/", () => {
       expect(res.body.data).toBeNull();
     });
 
+    // a/ The rule and data fields are required.
     it("should throw if rule is not set", async () => {
       const res = await server.post("/validate-rule").send({});
       expect(res.statusCode).toBe(400);
     });
 
+    // a/ The rule and data fields are required.
     it("should return a message when data is not set", async () => {
       const res = await server.post("/validate-rule").send({ rule: {} });
       expect(res.body.message).toBe("data is required.");
       expect(res.body.status).toBe("error");
       expect(res.body.data).toBeNull();
+    });
+
+    // b/ The rule field should be a valid JSON object
+    it("should fail if rule is not a JSON object", async () => {
+      const res = await server
+        .post("/validate-rule")
+        .send({ rule: 1, data: {} });
+      expect(res.body.message).toBe("rule should be an object.");
+      expect(res.body.status).toBe("error");
+      expect(res.body.data).toBeNull();
+      expect(res.statusCode).toBe(400);
+    });
+    it("should pass if rule is a JSON object", async () => {
+      const res = await server
+        .post("/validate-rule")
+        .send({ rule: {}, data: {} });
+      expect(res.statusCode).toBe(200);
     });
   });
 });

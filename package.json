@@ -6,7 +6,8 @@
   "author": "Aleem Isiaka <aleemisiaka@gmail.com>",
   "scripts": {
     "start": "nodemon ./bin/www",
-    "test": "jest --testTimeout=10000"
+    "test": "jest --testTimeout=10000",
+    "test:w": "jest --testTimeout=10000 --watch"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",

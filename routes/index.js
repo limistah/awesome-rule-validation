@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-const { requiredFieldValidator } = require("../validators");
+const { requiredFieldValidator, jsonFieldValidator } = require("../validators");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -22,6 +22,7 @@ router.post(
   "/validate-rule",
   requiredFieldValidator("rule"),
   requiredFieldValidator("data"),
+  jsonFieldValidator("rule"),
   function (req, res, next) {
     res.status(200).json({});
   }
