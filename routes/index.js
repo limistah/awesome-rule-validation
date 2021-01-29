@@ -24,6 +24,11 @@ router.post(
   requiredFieldValidator("data"),
   jsonFieldValidator("rule"),
   function (req, res, next) {
+    const rule = req.body.rule;
+    console.log(rule);
+    next();
+  },
+  function (req, res, next) {
     res.status(200).json({});
   }
 );

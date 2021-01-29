@@ -23,6 +23,7 @@ const jsonFieldValidator = (fieldName = "") => (req, res, next) => {
       if (parsedRule.constructor !== Object) {
         throw new Error("rule should be an object.");
       }
+      req.body[fieldName] = parsedRule;
     }
     next();
   } catch (error) {

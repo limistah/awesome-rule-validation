@@ -80,9 +80,12 @@ describe("/", () => {
       expect(res.statusCode).toBe(400);
     });
     it("should pass if rule is a JSON object", async () => {
-      const res = await server
+      let res = await server
         .post("/validate-rule")
         .send({ rule: {}, data: {} });
+      expect(res.statusCode).toBe(200);
+
+      res = await server.post("/validate-rule").send({ rule: "{}", data: {} });
       expect(res.statusCode).toBe(200);
     });
   });

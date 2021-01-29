@@ -13,4 +13,12 @@ app.use(cookieParser());
 
 app.use("/", indexRouter);
 
+process.on("unhandledRejection", (reason) => {
+  console.log(reason);
+});
+
+app.use((err, req, res, next) => {
+  res.status(500).json(err);
+});
+
 module.exports = app;
