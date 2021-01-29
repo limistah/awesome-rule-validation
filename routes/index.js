@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+const { requiredFieldValidator } = require("../validators");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -19,30 +20,8 @@ router.get("/", function (req, res, next) {
 /* GET home page. */
 router.post(
   "/validate-rule",
-  function validateRuleField(req, res, next) {
-    const { rule } = req.body;
-    if (!rule) {
-      return res.status(400).json({
-        message: "rule is required.",
-        status: "error",
-        data: null,
-      });
-    }
-
-    next();
-  },
-  function validateDataField(req, res, next) {
-    const { data } = req.body;
-    if (!data) {
-      return res.status(400).json({
-        message: "data is required.",
-        status: "error",
-        data: null,
-      });
-    }
-
-    next();
-  },
+  requiredFieldValidator("rule"),
+  requiredFieldValidator("data"),
   function (req, res, next) {
     res.status(200).json({});
   }
