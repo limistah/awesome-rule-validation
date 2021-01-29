@@ -89,7 +89,7 @@ describe("/", () => {
     //   expect(res.statusCode).toBe(200);
     // });
     // 2b1 rule should contain field,condition & condition_value
-    it("should pass if rule has field, condition, condition_value properties", async () => {
+    it("should throw if rule has no field property", async () => {
       let res = await server
         .post("/validate-rule")
         .send({ rule: "{}", data: {} });
@@ -97,18 +97,51 @@ describe("/", () => {
       expect(res.body.message).toBe("rule.field is required.");
     });
 
-    it("should pass if rule has condition property", async () => {
+    it("should throw if rule has no condition property", async () => {
       let res = await server
         .post("/validate-rule")
         .send({ rule: { field: "name" }, data: {} });
       expect(res.body.message).toBe("rule.condition is required.");
     });
 
-    it("should pass if rule has condition_value property", async () => {
+    it("should throw if rule has no valid condition_value property", async () => {
       let res = await server
         .post("/validate-rule")
         .send({ rule: { field: "name", condition: "eq" }, data: {} });
       expect(res.body.message).toBe("rule.condition_value is required.");
+    });
+
+    // c/ The data field can be any of:
+    // c1/ A valid JSON object
+    it("should pass if data is a JSON object", async () => {
+      let res = await server.post("/validate-rule").send({
+        rule: { field: "name", condition: "eq", condition_value: "eq" },
+        data: {},
+      });
+      expect(res.statusCode).toBe(200);
+    });
+    // c2/ A valid array
+    it("should pass if data is an array", async () => {
+      let res = await server.post("/validate-rule").send({
+        rule: { field: "name", condition: "eq", condition_value: "eq" },
+        data: [],
+      });
+      expect(res.statusCode).toBe(200);
+    });
+    // c3/ A string
+    it("should pass if data is string", async () => {
+      let res = await server.post("/validate-rule").send({
+        rule: { field: "name", condition: "eq", condition_value: "eq" },
+        data: "[]",
+      });
+      expect(res.statusCode).toBe(200);
+    });
+    it("should fail if data is a number", async () => {
+      let res = await server.post("/validate-rule").send({
+        rule: { field: "name", condition: "eq", condition_value: "eq" },
+        data: 1,
+      });
+      expect(res.statusCode).toBe(400);
     });
   });
 });

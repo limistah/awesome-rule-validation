@@ -38,6 +38,11 @@ router.post(
       condition_value: Joi.string().required(),
     })
   ),
+  joiValidator(
+    "data",
+    Joi.alternatives().try(Joi.object(), Joi.string(), Joi.array())
+  ),
+
   function (req, res, next) {
     res.status(200).json({});
   }

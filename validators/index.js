@@ -36,21 +36,25 @@ const jsonFieldValidator = (fieldName = "") => (req, res, next) => {
 };
 
 const joiValidator = (fieldName = "", validationSchema) => (req, res, next) => {
-  const fieldValue = req.body[fieldName];
-  const { error, value } = validationSchema.validate(fieldValue);
-  console.log(error.details[0]);
-  if (error && error.details.length) {
-    const errorDetails = error.details[0];
+  try {
+    const fieldValue = req.body[fieldName];
+    const { error, value } = validationSchema.validate(fieldValue);
+    if (error && error.details.length) {
+      const errorDetails = error.details[0];
 
-    return res.status(400).json({
-      message: `${fieldName}.${errorDetails.message
-        .replace('"', "")
-        .replace('"', "")}.`,
-      status: "error",
-      data: null,
-    });
+      return res.status(400).json({
+        message: `${fieldName}.${errorDetails.message
+          .replace('"', "")
+          .replace('"', "")}.`,
+        status: "error",
+        data: null,
+      });
+    }
+    return next();
+  } catch (error) {
+    console.log(error);
+    next(error);
   }
-  return next();
 };
 
 module.exports = {
