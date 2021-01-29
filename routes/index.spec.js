@@ -116,15 +116,7 @@ describe("/", () => {
     it("should pass if data is a JSON object", async () => {
       let res = await server.post("/validate-rule").send({
         rule: { field: "name", condition: "eq", condition_value: "eq" },
-        data: {},
-      });
-      expect(res.statusCode).toBe(200);
-    });
-    // c2/ A valid array
-    it("should pass if data is an array", async () => {
-      let res = await server.post("/validate-rule").send({
-        rule: { field: "name", condition: "eq", condition_value: "eq" },
-        data: [],
+        data: { name: "Aleem" },
       });
       expect(res.statusCode).toBe(200);
     });
@@ -132,7 +124,7 @@ describe("/", () => {
     it("should pass if data is string", async () => {
       let res = await server.post("/validate-rule").send({
         rule: { field: "name", condition: "eq", condition_value: "eq" },
-        data: "[]",
+        data: '{"name":"Aleem"}',
       });
       expect(res.statusCode).toBe(200);
     });
@@ -142,6 +134,15 @@ describe("/", () => {
         data: 1,
       });
       expect(res.statusCode).toBe(400);
+    });
+    // g/ If the field specified in the rule object is missing from the data passed, your endpoint response (HTTP 400 status code) should be
+    it("should fail if field value is not in data", async () => {
+      let res = await server.post("/validate-rule").send({
+        rule: { field: "name", condition: "eq", condition_value: "eq" },
+        data: {},
+      });
+      expect(res.statusCode).toBe(400);
+      expect(res.body.message).toBe("field name is missing from data.");
     });
   });
 });

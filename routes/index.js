@@ -28,6 +28,7 @@ router.post(
   requiredFieldValidator("rule"),
   requiredFieldValidator("data"),
   jsonFieldValidator("rule"),
+  jsonFieldValidator("data"),
   joiValidator(
     "rule",
     Joi.object().keys({
@@ -42,6 +43,19 @@ router.post(
     "data",
     Joi.alternatives().try(Joi.object(), Joi.string(), Joi.array())
   ),
+
+  function fieldExistInDataValidator(req, res, next) {
+    let { rule, data } = req.body;
+
+    if (!data[rule.field]) {
+      return res.status(400).json({
+        message: `field ${rule.field} is missing from data.`,
+        status: "error",
+        data: null,
+      });
+    }
+    next();
+  },
 
   function (req, res, next) {
     res.status(200).json({});
