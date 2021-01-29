@@ -45,5 +45,12 @@ describe("/", () => {
       const res = await server.post("/validate-rule").send({});
       expect(res.statusCode).toBe(400);
     });
+
+    it("should return a message when rule is not set", async () => {
+      const res = await server.post("/validate-rule").send({});
+      expect(res.body.message).toBe("rule is required.");
+      expect(res.body.status).toBe("error");
+      expect(res.body.data).toBeNull();
+    });
   });
 });

@@ -22,7 +22,11 @@ router.post(
   function validateRuleField(req, res, next) {
     const { rule } = req.body;
     if (!rule) {
-      return res.status(400).json({});
+      return res.status(400).json({
+        message: "rule is required.",
+        status: "error",
+        data: null,
+      });
     }
   },
   function (req, res, next) {
