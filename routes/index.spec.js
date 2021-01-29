@@ -107,7 +107,7 @@ describe("/", () => {
     it("should pass if rule has condition_value property", async () => {
       let res = await server
         .post("/validate-rule")
-        .send({ rule: { field: "name", condition: "$eq" }, data: {} });
+        .send({ rule: { field: "name", condition: "eq" }, data: {} });
       expect(res.body.message).toBe("rule.condition_value is required.");
     });
   });

@@ -32,7 +32,9 @@ router.post(
     "rule",
     Joi.object().keys({
       field: Joi.string().required(),
-      condition: Joi.string().required(),
+      condition: Joi.string()
+        .required()
+        .valid("eq", "neq", "gt", "gte", "contains"),
       condition_value: Joi.string().required(),
     })
   ),
