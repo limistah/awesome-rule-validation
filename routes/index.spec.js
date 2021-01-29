@@ -52,5 +52,17 @@ describe("/", () => {
       expect(res.body.status).toBe("error");
       expect(res.body.data).toBeNull();
     });
+
+    it("should throw if rule is not set", async () => {
+      const res = await server.post("/validate-rule").send({});
+      expect(res.statusCode).toBe(400);
+    });
+
+    it("should return a message when data is not set", async () => {
+      const res = await server.post("/validate-rule").send({ rule: {} });
+      expect(res.body.message).toBe("data is required.");
+      expect(res.body.status).toBe("error");
+      expect(res.body.data).toBeNull();
+    });
   });
 });

@@ -28,6 +28,20 @@ router.post(
         data: null,
       });
     }
+
+    next();
+  },
+  function validateDataField(req, res, next) {
+    const { data } = req.body;
+    if (!data) {
+      return res.status(400).json({
+        message: "data is required.",
+        status: "error",
+        data: null,
+      });
+    }
+
+    next();
   },
   function (req, res, next) {
     res.status(200).json({});
