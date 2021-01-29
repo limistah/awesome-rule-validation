@@ -2,13 +2,15 @@ const request = require("supertest");
 const app = require("../app");
 
 describe("/", () => {
+  let server = null;
+  beforeAll(() => {
+    server = request(app);
+  });
+
+  afterAll(async () => {
+    await server.close();
+  });
   describe("GET /", () => {
-    let server = null;
-
-    beforeAll(() => {
-      server = request(app);
-    });
-
     it("should exists", async () => {
       const res = await server.get("/");
       expect(res.statusCode).toEqual(200);
@@ -24,6 +26,24 @@ describe("/", () => {
       expect(res.body.data.twitter).toEqual("@limistah");
       expect(res.body.data.email).toEqual("aleemisiaka@gmail.com");
       expect(res.body.data.mobile).toEqual("08120254644");
+    });
+  });
+
+  describe("POST /validate-rule", () => {
+    let server = null;
+
+    beforeAll(() => {
+      server = request(app);
+    });
+
+    it("should exists", async () => {
+      const res = await server.post("/validate-rule");
+      expect(res.statusCode).not.toBe(404);
+    });
+
+    it("should throw if rule is not set", async () => {
+      const res = await server.post("/validate-rule").send({});
+      expect(res.statusCode).toBe(400);
     });
   });
 });

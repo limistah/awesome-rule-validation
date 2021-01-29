@@ -16,4 +16,18 @@ router.get("/", function (req, res, next) {
   });
 });
 
+/* GET home page. */
+router.post(
+  "/validate-rule",
+  function validateRuleField(req, res, next) {
+    const { rule } = req.body;
+    if (!rule) {
+      return res.status(400).json({});
+    }
+  },
+  function (req, res, next) {
+    res.status(200).json({});
+  }
+);
+
 module.exports = router;
