@@ -79,14 +79,36 @@ describe("/", () => {
       expect(res.body.data).toBeNull();
       expect(res.statusCode).toBe(400);
     });
-    it("should pass if rule is a JSON object", async () => {
+    // it("should pass if rule is a JSON object", async () => {
+    //   let res = await server
+    //     .post("/validate-rule")
+    //     .send({ rule: {}, data: {} });
+    //   expect(res.statusCode).toBe(200);
+
+    //   res = await server.post("/validate-rule").send({ rule: "{}", data: {} });
+    //   expect(res.statusCode).toBe(200);
+    // });
+    // 2b1 rule should contain field,condition & condition_value
+    it("should pass if rule has field, condition, condition_value properties", async () => {
       let res = await server
         .post("/validate-rule")
-        .send({ rule: {}, data: {} });
-      expect(res.statusCode).toBe(200);
+        .send({ rule: "{}", data: {} });
+      expect(res.statusCode).toBe(400);
+      expect(res.body.message).toBe("rule.field is required.");
+    });
 
-      res = await server.post("/validate-rule").send({ rule: "{}", data: {} });
-      expect(res.statusCode).toBe(200);
+    it("should pass if rule has condition property", async () => {
+      let res = await server
+        .post("/validate-rule")
+        .send({ rule: { field: "name" }, data: {} });
+      expect(res.body.message).toBe("rule.condition is required.");
+    });
+
+    it("should pass if rule has condition_value property", async () => {
+      let res = await server
+        .post("/validate-rule")
+        .send({ rule: { field: "name", condition: "$eq" }, data: {} });
+      expect(res.body.message).toBe("rule.condition_value is required.");
     });
   });
 });

@@ -1,6 +1,11 @@
 var express = require("express");
 var router = express.Router();
-const { requiredFieldValidator, jsonFieldValidator } = require("../validators");
+const Joi = require("joi");
+const {
+  requiredFieldValidator,
+  jsonFieldValidator,
+  joiValidator,
+} = require("../validators");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -23,11 +28,14 @@ router.post(
   requiredFieldValidator("rule"),
   requiredFieldValidator("data"),
   jsonFieldValidator("rule"),
-  function (req, res, next) {
-    const rule = req.body.rule;
-    console.log(rule);
-    next();
-  },
+  joiValidator(
+    "rule",
+    Joi.object().keys({
+      field: Joi.string().required(),
+      condition: Joi.string().required(),
+      condition_value: Joi.string().required(),
+    })
+  ),
   function (req, res, next) {
     res.status(200).json({});
   }
