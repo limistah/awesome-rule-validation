@@ -1,8 +1,8 @@
 {
-  "name": "flwtest",
+  "name": "awesome-rule-validation-api",
   "version": "0.0.1",
   "private": true,
-  "description": "Flutterwave Backend Engineer (NodeJS) test",
+  "description": "Awesome Rule Validation API",
   "author": "Aleem Isiaka <aleemisiaka@gmail.com>",
   "scripts": {
     "start": "nodemon ./bin/www",
