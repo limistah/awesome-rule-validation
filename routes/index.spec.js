@@ -79,15 +79,6 @@ describe("/", () => {
       expect(res.body.data).toBeNull();
       expect(res.statusCode).toBe(400);
     });
-    // it("should pass if rule is a JSON object", async () => {
-    //   let res = await server
-    //     .post("/validate-rule")
-    //     .send({ rule: {}, data: {} });
-    //   expect(res.statusCode).toBe(200);
-
-    //   res = await server.post("/validate-rule").send({ rule: "{}", data: {} });
-    //   expect(res.statusCode).toBe(200);
-    // });
     // 2b1 rule should contain field,condition & condition_value
     it("should throw if rule has no field property", async () => {
       let res = await server
