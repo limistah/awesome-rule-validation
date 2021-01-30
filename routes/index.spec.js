@@ -269,7 +269,7 @@ describe("/", () => {
         rule: {
           field: "total",
           condition: "gt",
-          condition_value: "10",
+          condition_value: "21",
         },
         data: { total: "20" },
       });
@@ -284,7 +284,7 @@ describe("/", () => {
           condition: "gt",
           condition_value: "20",
         },
-        data: { total: "20" },
+        data: { total: "21" },
       });
       expect(res.statusCode).toBe(200);
       expect(res.body.message).toBe("field total successfully validated.");

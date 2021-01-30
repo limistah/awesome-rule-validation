@@ -95,7 +95,7 @@ router.post(
     }
 
     if (condition === "gt") {
-      if (parseFloat(valueAtIndex) > parseFloat(condition_value)) {
+      if (parseInt(valueAtIndex) <= parseInt(condition_value)) {
         validation_failed = true;
         message = `field ${field} failed validation.`;
       }
