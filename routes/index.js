@@ -28,7 +28,7 @@ router.post(
         condition: Joi.string()
           .required()
           .valid("eq", "neq", "gt", "gte", "contains"),
-        condition_value: Joi.string().required(),
+        condition_value: Joi.required(),
       })
     ),
     invalidNestedFieldValidator,
