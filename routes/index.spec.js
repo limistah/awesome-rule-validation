@@ -327,4 +327,41 @@ describe("/", () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("field total successfully validated.");
   });
+  // Nested object fields
+  it("should fail for unmatching gte condition", async () => {
+    let res = await server.post("/validate-rule").send({
+      rule: {
+        field: "score.total",
+        condition: "gte",
+        condition_value: "21",
+      },
+      data: { score: { total: "20" } },
+    });
+    expect(res.body.message).toBe("field score.total failed validation.");
+    expect(res.statusCode).toBe(400);
+  });
+
+  it("should pass for matching gte condition", async () => {
+    let res = await server.post("/validate-rule").send({
+      rule: {
+        field: "score.total",
+        condition: "gte",
+        condition_value: "20",
+      },
+      data: { score: { total: "21" } },
+    });
+    expect(res.body.message).toBe("field score.total successfully validated.");
+    expect(res.statusCode).toBe(200);
+
+    res = await server.post("/validate-rule").send({
+      rule: {
+        field: "score.total",
+        condition: "gte",
+        condition_value: "20",
+      },
+      data: { score: { total: "21" } },
+    });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toBe("field score.total successfully validated.");
+  });
 });
