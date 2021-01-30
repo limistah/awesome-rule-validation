@@ -115,7 +115,7 @@ describe("/", () => {
     // c1/ A valid JSON object
     it("should pass if data is a JSON object", async () => {
       let res = await server.post("/validate-rule").send({
-        rule: { field: "name", condition: "eq", condition_value: "eq" },
+        rule: { field: "name", condition: "eq", condition_value: "Aleem" },
         data: { name: "Aleem" },
       });
       expect(res.statusCode).toBe(200);
@@ -123,14 +123,14 @@ describe("/", () => {
     // c3/ A string
     it("should pass if data is string", async () => {
       let res = await server.post("/validate-rule").send({
-        rule: { field: "name", condition: "eq", condition_value: "eq" },
+        rule: { field: "name", condition: "eq", condition_value: "Aleem" },
         data: '{"name":"Aleem"}',
       });
       expect(res.statusCode).toBe(200);
     });
     it("should fail if data is a number", async () => {
       let res = await server.post("/validate-rule").send({
-        rule: { field: "name", condition: "eq", condition_value: "eq" },
+        rule: { field: "name", condition: "eq", condition_value: "Aleem" },
         data: 1,
       });
       expect(res.statusCode).toBe(400);
@@ -143,6 +143,74 @@ describe("/", () => {
       });
       expect(res.statusCode).toBe(400);
       expect(res.body.message).toBe("field name is missing from data.");
+    });
+    // Failing eq condition
+    it("should fail for unmatching eq condition", async () => {
+      let res = await server.post("/validate-rule").send({
+        rule: { field: "firstName", condition: "eq", condition_value: "Aleem" },
+        data: { firstName: "Isiaka" },
+      });
+      expect(res.statusCode).toBe(400);
+      expect(res.body.message).toBe("field firstName failed validation.");
+    });
+    it("should fail for matching eq condition on a string", async () => {
+      let res = await server.post("/validate-rule").send({
+        rule: {
+          field: "0",
+          condition: "eq",
+          condition_value: "a",
+        },
+        data: "damien-marley",
+      });
+      expect(res.body.message).toBe("field 0 failed validation.");
+      expect(res.statusCode).toBe(400);
+    });
+    // Passing eq condition
+    it("should pass for matching eq condition", async () => {
+      let res = await server.post("/validate-rule").send({
+        rule: { field: "firstName", condition: "eq", condition_value: "Aleem" },
+        data: { firstName: "Aleem" },
+      });
+      expect(res.statusCode).toBe(200);
+      expect(res.body.message).toBe("field firstName successfully validated.");
+    });
+    it("should pass for matching eq condition on a string", async () => {
+      let res = await server.post("/validate-rule").send({
+        rule: {
+          field: "0",
+          condition: "eq",
+          condition_value: "d",
+        },
+        data: "damien-marley",
+      });
+      expect(res.body.message).toBe("field 0 successfully validated.");
+      expect(res.statusCode).toBe(200);
+    });
+    // Failing contains condition
+    it("should fail for unmatching contains condition", async () => {
+      let res = await server.post("/validate-rule").send({
+        rule: {
+          field: "5",
+          condition: "contains",
+          condition_value: "rocinante",
+        },
+        data: ["The Nauvoo", "The Razorback", "The Roci", "Tycho"],
+      });
+      expect(res.statusCode).toBe(400);
+      expect(res.body.message).toBe("field 5 is missing from data.");
+    });
+    // Passing contains condition
+    it("should pass for matching contains condition", async () => {
+      let res = await server.post("/validate-rule").send({
+        rule: {
+          field: "3",
+          condition: "contains",
+          condition_value: "Tycho",
+        },
+        data: ["The Nauvoo", "The Razorback", "The Roci", "Tycho"],
+      });
+      expect(res.statusCode).toBe(200);
+      expect(res.body.message).toBe("field 3 successfully validated.");
     });
   });
 });

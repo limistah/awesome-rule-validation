@@ -12,13 +12,17 @@ const requiredFieldValidator = (fieldName = "") => (req, res, next) => {
   next();
 };
 
-const jsonFieldValidator = (fieldName = "") => (req, res, next) => {
-  const rule = req.body[fieldName];
+const jsonFieldValidator = (fieldName = "", excludeFailingStrings = false) => (
+  req,
+  res,
+  next
+) => {
+  let rule = req.body[fieldName];
 
   try {
     const ruleIsObject = rule.constructor === Object;
 
-    if (!ruleIsObject) {
+    if (!Array.isArray(rule) && !ruleIsObject) {
       const parsedRule = JSON.parse(rule);
       if (parsedRule.constructor !== Object) {
         throw new Error(`${fieldName} should be an object.`);
@@ -27,11 +31,15 @@ const jsonFieldValidator = (fieldName = "") => (req, res, next) => {
     }
     next();
   } catch (error) {
-    return res.status(400).json({
-      message: `${fieldName} should be an object.`,
-      status: "error",
-      data: null,
-    });
+    if (excludeFailingStrings) {
+      return next();
+    } else {
+      return res.status(400).json({
+        message: `${fieldName} should be an object.`,
+        status: "error",
+        data: null,
+      });
+    }
   }
 };
 
