@@ -263,5 +263,31 @@ describe("/", () => {
       expect(res.body.message).toBe("field 0 successfully validated.");
       expect(res.statusCode).toBe(200);
     });
+    // Failing gt condition
+    it("should fail for unmatching gt condition", async () => {
+      let res = await server.post("/validate-rule").send({
+        rule: {
+          field: "total",
+          condition: "gt",
+          condition_value: "10",
+        },
+        data: { total: "20" },
+      });
+      expect(res.statusCode).toBe(400);
+      expect(res.body.message).toBe("field total failed validation.");
+    });
+    // Passing gt condition
+    it("should pass for matching gt condition", async () => {
+      let res = await server.post("/validate-rule").send({
+        rule: {
+          field: "total",
+          condition: "gt",
+          condition_value: "20",
+        },
+        data: { total: "20" },
+      });
+      expect(res.statusCode).toBe(200);
+      expect(res.body.message).toBe("field total successfully validated.");
+    });
   });
 });

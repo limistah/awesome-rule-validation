@@ -94,6 +94,13 @@ router.post(
       }
     }
 
+    if (condition === "gt") {
+      if (parseFloat(valueAtIndex) > parseFloat(condition_value)) {
+        validation_failed = true;
+        message = `field ${field} failed validation.`;
+      }
+    }
+
     if (validation_failed) {
       status_code = 400;
       status = "error";
