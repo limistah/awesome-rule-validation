@@ -101,6 +101,13 @@ router.post(
       }
     }
 
+    if (condition === "gte") {
+      if (parseInt(valueAtIndex) < parseInt(condition_value)) {
+        validation_failed = true;
+        message = `field ${field} failed validation.`;
+      }
+    }
+
     if (validation_failed) {
       status_code = 400;
       status = "error";

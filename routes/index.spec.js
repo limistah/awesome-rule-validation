@@ -290,4 +290,41 @@ describe("/", () => {
       expect(res.body.message).toBe("field total successfully validated.");
     });
   });
+  // Failing gt condition
+  it("should fail for unmatching gte condition", async () => {
+    let res = await server.post("/validate-rule").send({
+      rule: {
+        field: "total",
+        condition: "gte",
+        condition_value: "21",
+      },
+      data: { total: "20" },
+    });
+    expect(res.body.message).toBe("field total failed validation.");
+    expect(res.statusCode).toBe(400);
+  });
+  // Passing gt condition
+  it("should pass for matching gte condition", async () => {
+    let res = await server.post("/validate-rule").send({
+      rule: {
+        field: "total",
+        condition: "gte",
+        condition_value: "20",
+      },
+      data: { total: "21" },
+    });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toBe("field total successfully validated.");
+
+    res = await server.post("/validate-rule").send({
+      rule: {
+        field: "total",
+        condition: "gte",
+        condition_value: "20",
+      },
+      data: { total: "20" },
+    });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toBe("field total successfully validated.");
+  });
 });
