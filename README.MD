@@ -59,3 +59,65 @@ To carryout a validation make a POST requet to /validate-rule with the body cont
   - `contains`: If the field value contains the condition value.
   - `eq`: If the field value is equal to the condition value.
   - `neq`: If the field value is not equal to the condition value.
+
+## Response
+
+### Success
+
+A successful validation returns a 200 status code and the response looks like this:
+
+```json
+// Request Body
+{
+  "rule": {
+    "field": "0",
+    "condition": "eq",
+    "condition_value": "d"
+  },
+  "data": "damien-marley"
+}
+
+// Response Body
+{
+    "message": "field 0 successfully validated.",
+    "status": "success",
+    "data": {
+        "validation": {
+            "error": false,
+            "field": "0",
+            "field_value": "d",
+            "condition": "eq",
+            "condition_value": "d"
+        }
+    }
+}
+```
+
+A failed validation response return 400 and the response looks like this:
+
+```json
+// Request Body
+{
+  "rule": {
+    "field": "0",
+    "condition": "eq",
+    "condition_value": "a"
+  },
+  "data": "damien-marley"
+}
+
+// Response Body
+{
+    "message": "field 0 failed validation.",
+    "status": "error",
+    "data": {
+        "validation": {
+            "error": true,
+            "field": "0",
+            "field_value": "d",
+            "condition": "eq",
+            "condition_value": "a"
+        }
+    }
+}
+```
