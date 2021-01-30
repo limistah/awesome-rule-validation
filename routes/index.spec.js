@@ -212,5 +212,56 @@ describe("/", () => {
       expect(res.statusCode).toBe(200);
       expect(res.body.message).toBe("field 3 successfully validated.");
     });
+
+    // Failing neq condition
+    it("should fail for matching neq condition", async () => {
+      let res = await server.post("/validate-rule").send({
+        rule: {
+          field: "firstName",
+          condition: "neq",
+          condition_value: "Aleem",
+        },
+        data: { firstName: "Aleem" },
+      });
+      expect(res.statusCode).toBe(400);
+      expect(res.body.message).toBe("field firstName failed validation.");
+    });
+    it("should fail for matching neq condition on a string", async () => {
+      let res = await server.post("/validate-rule").send({
+        rule: {
+          field: "1",
+          condition: "neq",
+          condition_value: "a",
+        },
+        data: "damien-marley",
+      });
+      expect(res.body.message).toBe("field 1 failed validation.");
+      expect(res.statusCode).toBe(400);
+    });
+    // Passing eq condition
+    it("should pass for unmatching neq condition", async () => {
+      let res = await server.post("/validate-rule").send({
+        rule: {
+          field: "firstName",
+          condition: "neq",
+          condition_value: "Aleem",
+        },
+        data: { firstName: "Isiaka" },
+      });
+      expect(res.statusCode).toBe(200);
+      expect(res.body.message).toBe("field firstName successfully validated.");
+    });
+    it("should pass for unmatching eq condition on a string", async () => {
+      let res = await server.post("/validate-rule").send({
+        rule: {
+          field: "0",
+          condition: "neq",
+          condition_value: "a",
+        },
+        data: "damien-marley",
+      });
+      expect(res.body.message).toBe("field 0 successfully validated.");
+      expect(res.statusCode).toBe(200);
+    });
   });
 });
