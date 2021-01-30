@@ -5,7 +5,8 @@
   "description": "Awesome Rule Validation API",
   "author": "Aleem Isiaka <aleemisiaka@gmail.com>",
   "scripts": {
-    "start": "nodemon ./bin/www",
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www",
     "test": "jest --testTimeout=10000",
     "test:w": "jest --testTimeout=10000 --watch"
   },
